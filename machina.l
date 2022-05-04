@@ -115,9 +115,9 @@ COMENTARIOS_MULTILINEA (\/\/)
 
 \"		BEGIN(CADENA);strcat(cadena, yytext);
 <CADENA>\\\n	i++;linea++;strcat(cadena, yytext);
-<CADENA>\"	BEGIN 0;strcat(cadena, yytext); printf("Linea %d - Constante Cadena: %s\n", linea-i, cadena);i=0;strcpy(cadena,"");
-<CADENA>{CTE_CADENA}		strcat(cadena,yytext);return(CTC_CADENA);
+<CADENA>\"	BEGIN 0;strcat(cadena, yytext); printf("Linea %d - Constante Cadena: %s\n", linea-i, cadena);i=0;strcpy(cadena,"");return(CTC_CADENA);
+<CADENA>{CTE_CADENA}		strcat(cadena,yytext);
 
-. printf ("Linea %d - Error: %s\n",linea,yytext);
+. printf ("Linea %d - Error: %s\n",linea,yytext);return(yytext[0]);
 
 %%
