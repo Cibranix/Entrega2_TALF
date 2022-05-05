@@ -19,11 +19,7 @@
 
 
 %%
-/*
-%left OR AND '*' '%' MOD '+' '-' '&' '@'
-%right EXP
-%nonassoc '-' '=' DISTINTO '<' '>' MENOR_IGUAL' MAYOR_IGUAL NOT
-*/
+
 /* DECLARACIONES */
 
 declaracion
@@ -33,10 +29,19 @@ declaracion
       ;
 
 declaracion_objeto
-      : ( IDENTIFICADOR )+ ':' [ CONSTANT ]? tipo_escalar
-      [ asignacion_escalar ]? ';'
-      | ( IDENTIFICADOR )+ ':' [ CONSTANT ]? tipo_complejo
-      [ asignacion_complejo ]? ';'
+      : lista_identificadores ':' tipo_escalar ';'
+      | lista_identificadores ':' CONSTANT tipo_escalar ';'
+      | lista_identificadores ':' tipo_escalar asignacion_escalar ';'
+      | lista_identificadores ':' CONSTANT tipo_escalar asignacion_escalar ';'
+      | lista_identificadores ':' tipo_complejo ';'
+      | lista_identificadores ':' CONSTANT tipo_complejo ';'
+      | lista_identificadores ':' tipo_complejo asignacion_complejo ';'
+      | lista_identificadores ':' CONSTANT tipo_complejo asignacion_complejo ';'
+      ;
+
+lista_identificadores
+      : IDENTIFICADOR
+      | lista_identificadores ',' IDENTIFICADOR
       ;
 
 tipo_escalar
@@ -47,7 +52,12 @@ tipo_escalar
       ;
 
 asignacion_escalar
-      : ASIG ( expresion )+
+      : ASIG lista_expresion
+      ;
+
+lista_expresion
+      : expresion
+      | lista_expresion ',' expresion
       ;
 
 tipo_complejo
@@ -67,14 +77,14 @@ tipo_compuesto
       | tipo_enumeracion
       ;
 
-asignacion_compleja
+asignacion_complejo
       : ASIG objeto_complejo
       ;
 
 objeto_complejo
-      : '[' ( objeto_complejo )+ ']'
-      | '{' ( elemento_hastable )+ '}'
-      | '(' ( elemento_registro )+ ')'
+      : '[' lista_objeto_complejo ']'
+      | '{' lista_elemento_hastable '}'
+      | '(' lista_elemento_registro ')'
       | literal
       ;
 
@@ -84,6 +94,21 @@ elemento_hastable
 
 elemento_registro
       : IDENTIFICADOR ASIG objeto_complejo
+      ;
+
+lista_objeto_complejo
+      : objeto_complejo
+      | lista_objeto_complejo ',' objeto_complejo
+      ;
+
+lista_elemento_hastable
+      : elemento_hastable
+      | lista_elemento_hastable ',' elemento_hastable
+      ;
+
+lista_elemento_registro
+      : elemento_registro
+      | lista_elemento_registro ',' elemento_registro
       ;
 
 /* TIPOS */
@@ -103,11 +128,16 @@ tipo_tablero
       ;
 
 tipo_registro
-      : RECORD [ componente ]+ FINISH RECORD
+      : RECORD lista_componente FINISH RECORD
+      ;
+
+lista_componente
+      : componente
+      | lista_componente componente
       ;
 
 componente
-      : ( IDENTIFICADOR )+ ':' especificacion_tipo ';'
+      : lista_identificadores ':' especificacion_tipo ';'
       ;
 
 tipo_hashtable
@@ -115,11 +145,18 @@ tipo_hashtable
       ;
 
 tipo_clase
-      : CLASS [ '(' nombre_de_tipo ')' ]? [ componente_clase ]+ FINISH CLASS
+      : CLASS lista_componente_clase FINISH CLASS
+      | CLASS '(' nombre_de_tipo ')' lista_componente_clase FINISH CLASS
+      ;
+
+lista_componente_clase
+      : componente_clase
+      | lista_componente_clase componente_clase
       ;
 
 componente_clase
-      : [ visibilidad ]? declaracion_componente
+      : declaracion_componente
+      | visibilidad declaracion_componente
       ;
 
 declaracion_componente
@@ -135,7 +172,8 @@ visibilidad
       ;
 
 declaracion_metodo
-      : [ modificador ]* declaracion_subprograma
+      : declaracion_subprograma
+      | lista_modificador declaracion_subprograma
       ;
 
 modificador
@@ -146,44 +184,80 @@ modificador
       | FINAL 
       ;
 
+lista_modificador
+      : modificador
+      | lista_modificador modificador
+      ;
+
 tipo_enumeracion
-      : ENUMERATION OF tipo_escalar ( elemento )+ FINISH ENUMERATION
+      : ENUMERATION OF tipo_escalar lista_elemento FINISH ENUMERATION
       ;
 
 elemento
-      : [ IDENTIFICADOR FLECHA ]? literal
+      : literal
+      | IDENTIFICADOR FLECHA literal
+      ;
+
+lista_elemento
+      : elemento
+      | lista_elemento ',' elemento
       ;
 
 /* SUBPROGRAMAS */
 
 declaracion_subprograma
-      : especificacion_subprograma [ cuerpo_subprograma ]? ';'
+      : especificacion_subprograma ';'
+      | especificacion_subprograma cuerpo_subprograma ';'
       ;
 
 especificacion_subprograma
-      : PROCEDURE IDENTIFICADOR [ '(' parte_formal ')' ]?
-      | FUNCTION IDENTIFICADOR [ '(' parte_formal ')' ]?
+      : PROCEDURE IDENTIFICADOR
+      | PROCEDURE IDENTIFICADOR '(' parte_formal ')'
+      | FUNCTION IDENTIFICADOR
+      | FUNCTION IDENTIFICADOR '(' parte_formal ')'
       RETURN especificacion_tipo
       ;
 
 parte_formal
-      : [ declaracion_parametros ]?
+      : /*vacio*/
+      | declaracion_parametros
       ;
 
 declaracion_parametros
-      : declaracion_parametro [ ';' declaracion_parametro ]*
+      : declaracion_parametro
+      | declaracion_parametro lista_declaracion_parametro
+      ;
+
+lista_declaracion_parametro
+      : declaracion_parametro
+      | declaracion_parametro ';' lista_declaracion_parametro
       ;
 
 declaracion_parametro
-      : ( IDENTIFICADOR )+ ':' [ modo ]? especificacion_tipo
+      : lista_identificadores ':' especificacion_tipo
+      | lista_identificadores ':' modo especificacion_tipo
       ;
 
 modo
-      : IN [ OUT ]?
+      : IN
+      | IN OUT
       ;
 
 cuerpo_subprograma
-      : IS [ declaracion ]* START [ instruccion ]+ FINISH [ IDENTIFICADOR ]?
+      : IS START lista_instruccion FINISH
+      | IS START lista_instruccion FINISH IDENTIFICADOR
+      | IS lista_declaracion START lista_instruccion FINISH
+      | IS lista_declaracion START lista_instruccion FINISH IDENTIFICADOR
+      ;
+
+lista_instruccion
+      : instruccion
+      | lista_instruccion instruccion
+      ;
+
+lista_declaracion
+      : declaracion
+      | lista_declaracion declaracion
       ;
 
 /* INSTRUCCIONES */
@@ -214,39 +288,56 @@ instruccion_return
       ;
 
 instruccion_exit
-      : EXIT [ IDENTIFICADOR ]? [ WHEN expresion ]? ';'
+      : EXIT ';'
+      | EXIT IDENTIFICADOR ';'
+      | EXIT WHEN expresion ';'
+      | EXIT IDENTIFICADOR WHEN expresion ';'
       ;
 
 instruccion_if
-      : IF expresion THEN [ instruccion ]+
-      [ ELSE [ instruccion ]+ ]? FINISH IF ';' 
+      : IF expresion THEN lista_instruccion FINISH IF ';'
+      | IF expresion THEN lista_instruccion ELSE lista_instruccion FINISH IF ';'
       ;
 
 instruccion_case
-      : CASE expresion IS [ caso_when ]+ FINISH CASE ';'
+      : CASE expresion IS lista_caso_when FINISH CASE ';'
       ;
 
 caso_when
-      : WHEN entrada [ '|' entrada ]* FLECHA [ instruccion ]+
+      : WHEN entrada FLECHA lista_instruccion
+      | WHEN entrada lista_entrada FLECHA lista_instruccion
+      ;
+
+lista_caso_when
+      : caso_when
+      | lista_caso_when caso_when
       ;
 
 entrada
-      : expresion [ DOS_PTOS expresion ]?
+      : expresion
+      | expresion DOS_PTOS expresion
       | OTHERS
       ;
 
+lista_entrada
+      : entrada
+      | entrada '|' lista_entrada
+      ;
+
 instruccion_loop
-      : [ IDENTIFICADOR ':' ]? clausula_iteracion bucle_base ';'
+      : clausula_iteracion bucle_base ';'
+      | IDENTIFICADOR ':' clausula_iteracion bucle_base ';'
       ;
 
 clausula_iteracion
-      : FOR IDENTIFICADOR IN [ REVERSE ]? expresion DOS_PTOS expresion
+      : FOR IDENTIFICADOR IN expresion DOS_PTOS expresion
+      | FOR IDENTIFICADOR IN REVERSE expresion DOS_PTOS expresion
       | FOREACH IDENTIFICADOR IN expresion
       | WHILE expresion
       ;
 
 bucle_base
-      : LOOP [ instruccion ]+ FINISH LOOP
+      : LOOP lista_instruccion FINISH LOOP
       ;
 
 instruccion_rise
@@ -254,27 +345,33 @@ instruccion_rise
       ;
 
 instruccion_try_catch
-      : TRY [ instruccion ]+ clausulas_excepcion FINISH TRY
+      : TRY lista_instruccion clausulas_excepcion FINISH TRY
       ;
 
 clausulas_excepcion
-      : [ clausula_especifica ]* clausula_defecto
-      | [ clausula_especifica ]+
+      : clausula_defecto
+      | lista_clausula_especifica clausula_defecto
+      | lista_clausula_especifica
       ;
 
 clausula_especifica
-      : EXCEPTION '(' IDENTIFICADOR ')' [ instruccion ]+
+      : EXCEPTION '(' IDENTIFICADOR ')' lista_instruccion
+      ;
+
+lista_clausula_especifica
+      : clausula_especifica
+      | lista_clausula_especifica clausula_especifica
       ;
 
 clausula_defecto
-      : DEFAULT '(' IDENTIFICADOR ')' [ instruccion ]+
+      : DEFAULT '(' IDENTIFICADOR ')' lista_instruccion
       ;
 
 llamada_procedure
       : llamada_suprograma ';'
 
 llamada_suprograma
-      : IDENTIFICADOR '(' ( expresion )* ')'
+      : IDENTIFICADOR '(' lista_expresion ')'
       ;
 
 /* EXPRESIONES */
@@ -320,9 +417,11 @@ componente_compuesto
       | nombre '.' llamada_suprograma
       ;
 
-expresion
-      : expresion_logica [ IF expresion ELSE expresion ]?
-      ;
+/*expresion
+      : expresion_logica
+      | expresion_logica IF expresion ELSE expresion
+      ;*/
+
 
 %%
 
