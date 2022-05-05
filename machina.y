@@ -450,6 +450,7 @@ expresion_logica5
 expresion_logica6
     : expresion_logica6 '+' expresion_logica7
     | expresion_logica6 '-' expresion_logica7
+    //| expresion_logica6 '-' expresion_logica9 //sobrecargar para resta y menos unitario
     | expresion_logica7                                                       
     ;
 
@@ -461,7 +462,7 @@ expresion_logica7
     ;
 
 expresion_logica8
-    : expresion_logica9 '**' expresion_logica8                                  
+    : expresion_logica9 EXP expresion_logica8                                  
     | expresion_logica9                                                       
     ;
 
