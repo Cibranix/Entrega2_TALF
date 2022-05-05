@@ -377,7 +377,7 @@ llamada_suprograma
 /* EXPRESIONES */
 
 primario
-      : literal
+      : literal    {printf("primario->literal\n");}
       | nombre
       | '(' expresion ')'
       ;
@@ -389,11 +389,6 @@ literal
       | CTC_INT
       | TRUE
       | FALSE
-      ;
-
-operador_unario
-      : NOT
-      | '-'
       ;
 
 nombre
@@ -417,14 +412,70 @@ componente_compuesto
       | nombre '.' llamada_suprograma
       ;
 
-/*expresion
+expresion_logica 
+    : expresion_logica OR expresion_logica1
+    | expresion_logica1
+    ;
+
+expresion_logica1
+    : expresion_logica1 AND expresion_logica2
+    | expresion_logica2
+    ;
+
+expresion_logica2
+    : NOT expresion_logica3
+    | expresion_logica3
+    ;
+
+expresion_logica3
+    : expresion_logica3 '=' expresion_logica4
+    | expresion_logica3 DISTINTO expresion_logica4
+    | expresion_logica3 '<' expresion_logica4
+    | expresion_logica3 '>' expresion_logica4
+    | expresion_logica3 MENOR_IGUAL expresion_logica4
+    | expresion_logica3 MAYOR_IGUAL expresion_logica4
+    | expresion_logica4
+    ;
+
+expresion_logica4
+    : expresion_logica4 '@' expresion_logica5
+    | expresion_logica5
+    ;
+
+expresion_logica5
+    : expresion_logica5 '&' expresion_logica6
+    | expresion_logica6
+    ;
+
+expresion_logica6
+    : expresion_logica6 '+' expresion_logica7
+    | expresion_logica6 '-' expresion_logica7
+    | expresion_logica7                                                       
+    ;
+
+expresion_logica7
+    : expresion_logica7 '*' expresion_logica8                               
+    | expresion_logica7 '%' expresion_logica8
+    | expresion_logica7 MOD expresion_logica8                                
+    | expresion_logica8                                                       
+    ;
+
+expresion_logica8
+    : expresion_logica9 '**' expresion_logica8                                  
+    | expresion_logica9                                                       
+    ;
+
+expresion_logica9
+    : '-' primario
+    | primario
+    ;
+
+expresion
       : expresion_logica
       | expresion_logica IF expresion ELSE expresion
-      ;*/
-
+      ;
 
 %%
-
 
 int yyerror(char *s) {
   fflush(stdout);
