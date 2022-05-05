@@ -93,7 +93,7 @@ elemento_hastable
       ;
 
 elemento_registro
-      : IDENTIFICADOR ASIG objeto_complejo      {printf("elemento_hastable->IDENTIFICADOR ASIG objeto_complejo\n");}
+      : IDENTIFICADOR ASIG objeto_complejo      {printf("elemento_registro->IDENTIFICADOR ASIG objeto_complejo\n");}
       ;
 
 lista_objeto_complejo
@@ -107,191 +107,191 @@ lista_elemento_hastable
       ;
 
 lista_elemento_registro
-      : elemento_registro
-      | lista_elemento_registro ',' elemento_registro
+      : elemento_registro                                   {printf("lista_elemento_registro->elemento_registro\n");}
+      | lista_elemento_registro ',' elemento_registro       {printf("lista_elemento_registro->lista_elemento_registro ',' elemento_registro\n");}
       ;
 
 /* TIPOS */
 
 declaracion_tipo
-      : TYPE IDENTIFICADOR IS especificacion_tipo ';'
+      : TYPE IDENTIFICADOR IS especificacion_tipo ';'       {printf("declaracion_tipo->TYPE IDENTIFICADOR IS especificacion_tipo ';'\n");}
       ;
 
 especificacion_tipo
-      : tipo_escalar
-      | nombre_de_tipo
-      | tipo_compuesto
+      : tipo_escalar                      {printf("especificacion_tipo->tipo_escalar\n");}
+      | nombre_de_tipo                    {printf("especificacion_tipo->nombre_de_tipo\n");}
+      | tipo_compuesto                    {printf("especificacion_tipo->tipo_compuesto\n");}
       ;
 
 tipo_tablero
-      : ARRAY '(' expresion DOS_PTOS expresion ')' OF especificacion_tipo
+      : ARRAY '(' expresion DOS_PTOS expresion ')' OF especificacion_tipo     {printf("tipo_tablero->ARRAY '(' expresion DOS_PTOS expresion ')' OF especificacion_tipo\n");}
       ;
 
 tipo_registro
-      : RECORD lista_componente FINISH RECORD
+      : RECORD lista_componente FINISH RECORD   {printf("tipo_registro->RECORD lista_componente FINISH RECORD\n");}
       ;
 
 lista_componente
-      : componente
-      | lista_componente componente
+      : componente                        {printf("lista_componente->componente\n");}
+      | lista_componente componente       {printf("lista_componente->lista_componente componente\n");}
       ;
 
 componente
-      : lista_identificadores ':' especificacion_tipo ';'
+      : lista_identificadores ':' especificacion_tipo ';'   {printf("componente->lista_identificadores ':' especificacion_tipo ';'\n");}
       ;
 
 tipo_hashtable
-      : HASHTABLE OF '<' especificacion_tipo ',' especificacion_tipo '>'
+      : HASHTABLE OF '<' especificacion_tipo ',' especificacion_tipo '>'      {printf("tipo_hashtable->HASHTABLE OF '<' especificacion_tipo ',' especificacion_tipo '>'\n");}
       ;
 
 tipo_clase
-      : CLASS lista_componente_clase FINISH CLASS
-      | CLASS '(' nombre_de_tipo ')' lista_componente_clase FINISH CLASS
+      : CLASS lista_componente_clase FINISH CLASS                             {printf("tipo_clase->CLASS lista_componente_clase FINISH CLASS\n");}
+      | CLASS '(' nombre_de_tipo ')' lista_componente_clase FINISH CLASS      {printf("tipo_clase->CLASS '(' nombre_de_tipo ')' lista_componente_clase FINISH CLASS\n");}
       ;
 
 lista_componente_clase
-      : componente_clase
-      | lista_componente_clase componente_clase
+      : componente_clase                              {printf("lista_componente_clase->componente_clase\n");}
+      | lista_componente_clase componente_clase       {printf("lista_componente_clase->lista_componente_clase componente_clase\n");}
       ;
 
 componente_clase
-      : declaracion_componente
-      | visibilidad declaracion_componente
+      : declaracion_componente                        {printf("componente_clase->declaracion_componente\n");}
+      | visibilidad declaracion_componente            {printf("componente_clase->visibilidad declaracion_componente\n");}
       ;
 
 declaracion_componente
-      : declaracion_objeto
-      | declaracion_tipo
-      | declaracion_metodo
+      : declaracion_objeto          {printf("declaracion_componente->declaracion_objeto\n");}
+      | declaracion_tipo            {printf("declaracion_componente->declaracion_tipo\n");}
+      | declaracion_metodo          {printf("declaracion_componente->declaracion_metodo\n");}
       ;
 
 visibilidad
-      : PUBLIC
-      | PROTECTED
-      | PRIVATE
+      : PUBLIC          {printf("visibilidad->PUBLIC\n");}
+      | PROTECTED       {printf("visibilidad->PROTECTED\n");}
+      | PRIVATE         {printf("visibilidad->PRIVATE\n");}
       ;
 
 declaracion_metodo
-      : declaracion_subprograma
-      | lista_modificador declaracion_subprograma
+      : declaracion_subprograma                       {printf("declaracion_metodo->declaracion_subprograma\n");}
+      | lista_modificador declaracion_subprograma     {printf("declaracion_metodo->lista_modificador declaracion_subprograma\n");}
       ;
 
 modificador
-      : CONSTRUCTOR
-      | DESTRUCTOR
-      | ABSTRACT
-      | ESPECIFIC
-      | FINAL 
+      : CONSTRUCTOR     {printf("modificador->CONSTRUCTOR\n");}
+      | DESTRUCTOR      {printf("modificador->DESTRUCTOR\n");}
+      | ABSTRACT        {printf("modificador->ABSTRACT\n");}
+      | ESPECIFIC       {printf("modificador->ESPECIFIC\n");}
+      | FINAL           {printf("modificador->FINAL\n");}
       ;
 
 lista_modificador
-      : modificador
-      | lista_modificador modificador
+      : modificador                       {printf("lista_modificador->modificador\n");}
+      | lista_modificador modificador     {printf("lista_modificador->lista_modificador modificador\n");}
       ;
 
 tipo_enumeracion
-      : ENUMERATION OF tipo_escalar lista_elemento FINISH ENUMERATION
+      : ENUMERATION OF tipo_escalar lista_elemento FINISH ENUMERATION   {printf("tipo_enumeracion->ENUMERATION OF tipo_escalar lista_elemento FINISH ENUMERATION\n");}
       ;
 
 elemento
-      : literal
-      | IDENTIFICADOR FLECHA literal
+      : literal                           {printf("elemento->literal\n");}
+      | IDENTIFICADOR FLECHA literal      {printf("elemento->IDENTIFICADOR FLECHA literal\n");}
       ;
 
 lista_elemento
-      : elemento
-      | lista_elemento ',' elemento
+      : elemento                          {printf("lista_elemento->elemento\n");}
+      | lista_elemento ',' elemento       {printf("lista_elemento->lista_elemento ',' elemento\n");}
       ;
 
 /* SUBPROGRAMAS */
 
 declaracion_subprograma
-      : especificacion_subprograma ';'
-      | especificacion_subprograma cuerpo_subprograma ';'
+      : especificacion_subprograma ';'                      {printf("declaracion_subprograma->especificacion_subprograma ';'\n");}
+      | especificacion_subprograma cuerpo_subprograma ';'   {printf("declaracion_subprograma->especificacion_subprograma cuerpo_subprograma ';'\n");}
       ;
 
 especificacion_subprograma
-      : PROCEDURE IDENTIFICADOR
-      | PROCEDURE IDENTIFICADOR '(' parte_formal ')'
-      | FUNCTION IDENTIFICADOR
-      | FUNCTION IDENTIFICADOR '(' parte_formal ')'
-      RETURN especificacion_tipo
+      : PROCEDURE IDENTIFICADOR                             {printf("especificacion_subprograma->PROCEDURE IDENTIFICADOR\n");}
+      | PROCEDURE IDENTIFICADOR '(' parte_formal ')'        {printf("especificacion_subprograma->PROCEDURE IDENTIFICADOR '(' parte_formal ')'\n");}
+      | FUNCTION IDENTIFICADOR                              {printf("especificacion_subprograma->FUNCTION IDENTIFICADOR\n");}
+      | FUNCTION IDENTIFICADOR '(' parte_formal ')'         {printf("especificacion_subprograma->FUNCTION IDENTIFICADOR '(' parte_formal ')'\n");}
+      RETURN especificacion_tipo                            {printf("especificacion_subprograma->RETURN especificacion_tipo\n");}
       ;
 
 parte_formal
-      : /*vacio*/
-      | declaracion_parametros
+      : /*vacio*/                   {printf("parte_formal->vacio\n");}
+      | declaracion_parametros      {printf("parte_formal->declaracion_parametros\n");}
       ;
 
 declaracion_parametros
-      : declaracion_parametro
-      | declaracion_parametro lista_declaracion_parametro
+      : declaracion_parametro                               {printf("declaracion_parametros->declaracion_parametro\n");}
+      | declaracion_parametro lista_declaracion_parametro   {printf("declaracion_parametros->declaracion_parametro lista_declaracion_parametro\n");}
       ;
 
 lista_declaracion_parametro
-      : declaracion_parametro
-      | declaracion_parametro ';' lista_declaracion_parametro
+      : declaracion_parametro                                     {printf("lista_declaracion_parametro->declaracion_parametro\n");}
+      | declaracion_parametro ';' lista_declaracion_parametro     {printf("lista_declaracion_parametro->declaracion_parametro ';' lista_declaracion_parametro\n");}
       ;
 
 declaracion_parametro
-      : lista_identificadores ':' especificacion_tipo
-      | lista_identificadores ':' modo especificacion_tipo
+      : lista_identificadores ':' especificacion_tipo             {printf("declaracion_parametro->lista_identificadores ':' especificacion_tipo\n");}
+      | lista_identificadores ':' modo especificacion_tipo        {printf("declaracion_parametro->lista_identificadores ':' modo especificacion_tipo\n");}
       ;
 
 modo
-      : IN
-      | IN OUT
+      : IN              {printf("modo->IN\n");}
+      | IN OUT          {printf("modo->IN OUT\n");}
       ;
 
 cuerpo_subprograma
-      : IS START lista_instruccion FINISH
-      | IS START lista_instruccion FINISH IDENTIFICADOR
-      | IS lista_declaracion START lista_instruccion FINISH
-      | IS lista_declaracion START lista_instruccion FINISH IDENTIFICADOR
+      : IS START lista_instruccion FINISH                                     {printf("cuerpo_subprograma->IS START lista_instruccion FINISH\n");}
+      | IS START lista_instruccion FINISH IDENTIFICADOR                       {printf("cuerpo_subprograma->IS START lista_instruccion FINISH IDENTIFICADOR\n");}
+      | IS lista_declaracion START lista_instruccion FINISH                   {printf("cuerpo_subprograma->IS lista_declaracion START lista_instruccion FINISH\n");}
+      | IS lista_declaracion START lista_instruccion FINISH IDENTIFICADOR     {printf("cuerpo_subprograma->IS lista_declaracion START lista_instruccion FINISH IDENTIFICADOR\n");}
       ;
 
 lista_instruccion
-      : instruccion
-      | lista_instruccion instruccion
+      : instruccion                       {printf("lista_instruccion->instruccion\n");}
+      | lista_instruccion instruccion     {printf("lista_instruccion->lista_instruccion instruccion\n");}
       ;
 
 lista_declaracion
-      : declaracion
-      | lista_declaracion declaracion
+      : declaracion                       {printf("lista_declaracion->declaracion\n");}
+      | lista_declaracion declaracion     {printf("lista_declaracion->lista_declaracion declaracion\n");}
       ;
 
 /* INSTRUCCIONES */
 
 instruccion
-      : instruccion_vacia
-      | instruccion_asignacion
-      | instruccion_exit
-      | instruccion_return
-      | instruccion_if
-      | instruccion_case
-      | instruccion_loop
-      | instruccion_rise
-      | instruccion_try_catch
-      | llamada_procedure
+      : instruccion_vacia           {printf("instruccion->instruccion_vacia\n");}
+      | instruccion_asignacion      {printf("instruccion->instruccion_asignacion\n");}
+      | instruccion_exit            {printf("instruccion->instruccion_exit\n");}
+      | instruccion_return          {printf("instruccion->instruccion_return\n");}
+      | instruccion_if              {printf("instruccion->instruccion_if\n");}
+      | instruccion_case            {printf("instruccion->instruccion_case\n");}
+      | instruccion_loop            {printf("instruccion->instruccion_loop\n");}
+      | instruccion_rise            {printf("instruccion->instruccion_rise\n");}
+      | instruccion_try_catch       {printf("instruccion->instruccion_try_catch\n");}
+      | llamada_procedure           {printf("instruccion->llamada_procedure\n");}
       ;
 
 instruccion_vacia
-      : NIL ';'
+      : NIL ';'   {printf("instruccion_vacia->NIL ';'\n");}
       ;
 
 instruccion_asignacion
-      : nombre ASIG expresion ';'
+      : nombre ASIG expresion ';'   {printf("instruccion_asignacion->nombre ASIG expresion ';'\n");}
       ;
 
 instruccion_return
-      : RETURN expresion ';'
+      : RETURN expresion ';'        {printf("instruccion_return->RETURN expresion ';'\n");}
       ;
 
 instruccion_exit
-      : EXIT ';'
-      | EXIT IDENTIFICADOR ';'
-      | EXIT WHEN expresion ';'
-      | EXIT IDENTIFICADOR WHEN expresion ';'
+      : EXIT ';'                                {printf("instruccion_exit->EXIT ';'\n");}
+      | EXIT IDENTIFICADOR ';'                  {printf("instruccion_exit->EXIT IDENTIFICADOR ';'\n");}
+      | EXIT WHEN expresion ';'                 {printf("instruccion_exit->EXIT WHEN expresion ';'\n");}
+      | EXIT IDENTIFICADOR WHEN expresion ';'   {printf("instruccion_exit->EXIT IDENTIFICADOR WHEN expresion ';'\n");}
       ;
 
 instruccion_if
