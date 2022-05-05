@@ -23,87 +23,87 @@
 /* DECLARACIONES */
 
 declaracion
-      : declaracion_objeto
-      | declaracion_tipo
-      | declaracion_subprograma
+      : declaracion_objeto                {printf("declaracion->declaracion_objeto\n");}
+      | declaracion_tipo                  {printf("declaracion->declaracion_tipo\n");}
+      | declaracion_subprograma           {printf("declaracion->declaracion_subprograma\n");}
       ;
 
 declaracion_objeto
-      : lista_identificadores ':' tipo_escalar ';'
-      | lista_identificadores ':' CONSTANT tipo_escalar ';'
-      | lista_identificadores ':' tipo_escalar asignacion_escalar ';'
-      | lista_identificadores ':' CONSTANT tipo_escalar asignacion_escalar ';'
-      | lista_identificadores ':' tipo_complejo ';'
-      | lista_identificadores ':' CONSTANT tipo_complejo ';'
-      | lista_identificadores ':' tipo_complejo asignacion_complejo ';'
-      | lista_identificadores ':' CONSTANT tipo_complejo asignacion_complejo ';'
+      : lista_identificadores ':' tipo_escalar ';'                                  {printf("declaracion_objeto->lista_identificadores ':' tipo_escalar ';'\n");}
+      | lista_identificadores ':' CONSTANT tipo_escalar ';'                         {printf("declaracion_objeto->lista_identificadores ':' CONSTANT tipo_escalar ';'\n");}
+      | lista_identificadores ':' tipo_escalar asignacion_escalar ';'               {printf("declaracion_objeto->lista_identificadores ':' tipo_escalar asignacion_escalar ';'\n");}
+      | lista_identificadores ':' CONSTANT tipo_escalar asignacion_escalar ';'      {printf("declaracion_objeto->lista_identificadores ':' CONSTANT tipo_escalar asignacion_escalar ';'\n");}
+      | lista_identificadores ':' tipo_complejo ';'                                 {printf("declaracion_objeto->lista_identificadores ':' tipo_complejo ';'\n");}
+      | lista_identificadores ':' CONSTANT tipo_complejo ';'                        {printf("declaracion_objeto->lista_identificadores ':' CONSTANT tipo_complejo ';'\n");}
+      | lista_identificadores ':' tipo_complejo asignacion_complejo ';'             {printf("declaracion_objeto->lista_identificadores ':' tipo_complejo asignacion_complejo ';'\n");}
+      | lista_identificadores ':' CONSTANT tipo_complejo asignacion_complejo ';'    {printf("declaracion_objeto->lista_identificadores ':' CONSTANT tipo_complejo asignacion_complejo ';'\n");}
       ;
 
 lista_identificadores
-      : IDENTIFICADOR
-      | lista_identificadores ',' IDENTIFICADOR
+      : IDENTIFICADOR                                 {printf("lista_identificadores->IDENTIFICADOR\n");}
+      | lista_identificadores ',' IDENTIFICADOR       {printf("lista_identificadores->lista_identificadores ',' IDENTIFICADOR\n");}
       ;
 
 tipo_escalar
-      : INTEGER
-      | FLOAT
-      | BOOLEAN
-      | CHARACTER
+      : INTEGER         {printf("tipo_escalar->INTEGER\n");}
+      | FLOAT           {printf("tipo_escalar->FLOAT\n");}
+      | BOOLEAN         {printf("tipo_escalar->BOOLEAN\n");}
+      | CHARACTER       {printf("tipo_escalar->CHARACTER\n");}
       ;
 
 asignacion_escalar
-      : ASIG lista_expresion
+      : ASIG lista_expresion        {printf("asignacion_escalar->ASIG lista_expresion \n");}
       ;
 
 lista_expresion
-      : expresion
-      | lista_expresion ',' expresion
+      : expresion                         {printf("lista_expresion->expresion\n");}
+      | lista_expresion ',' expresion     {printf("lista_expresion->lista_expresion ',' expresion\n");}
       ;
 
 tipo_complejo
-      : nombre_de_tipo
-      | tipo_compuesto
+      : nombre_de_tipo        {printf("tipo_complejo->nombre_de_tipo\n");}
+      | tipo_compuesto        {printf("tipo_complejo->tipo_compuesto\n");}
       ;
 
 nombre_de_tipo
-      : IDENTIFICADOR
+      : IDENTIFICADOR         {printf("nombre_de_tipo->IDENTIFICADOR\n");}
       ;
 
 tipo_compuesto
-      : tipo_tablero
-      | tipo_registro
-      | tipo_hashtable
-      | tipo_clase
-      | tipo_enumeracion
+      : tipo_tablero          {printf("tipo_compuesto->tipo_tablero\n");}
+      | tipo_registro         {printf("tipo_compuesto->tipo_registro\n");}
+      | tipo_hashtable        {printf("tipo_compuesto->tipo_hashtable\n");}
+      | tipo_clase            {printf("tipo_compuesto->tipo_clase\n");}
+      | tipo_enumeracion      {printf("tipo_compuesto->tipo_enumeracion\n");}
       ;
 
 asignacion_complejo
-      : ASIG objeto_complejo
+      : ASIG objeto_complejo  {printf("asignacion_complejo->ASIG objeto_complejo\n");}
       ;
 
 objeto_complejo
-      : '[' lista_objeto_complejo ']'
-      | '{' lista_elemento_hastable '}'
-      | '(' lista_elemento_registro ')'
-      | literal
+      : '[' lista_objeto_complejo ']'     {printf("objeto_complejo->'[' lista_objeto_complejo ']'\n");}
+      | '{' lista_elemento_hastable '}'   {printf("objeto_complejo->'{' lista_elemento_hastable '}'\n");}
+      | '(' lista_elemento_registro ')'   {printf("objeto_complejo->'(' lista_elemento_registro ')'\n");}
+      | literal                           {printf("objeto_complejo->literal\n");}
       ;
 
 elemento_hastable
-      : objeto_complejo FLECHA objeto_complejo
+      : objeto_complejo FLECHA objeto_complejo  {printf("elemento_hastable->objeto_complejo FLECHA objeto_complejo\n");}
       ;
 
 elemento_registro
-      : IDENTIFICADOR ASIG objeto_complejo
+      : IDENTIFICADOR ASIG objeto_complejo      {printf("elemento_hastable->IDENTIFICADOR ASIG objeto_complejo\n");}
       ;
 
 lista_objeto_complejo
-      : objeto_complejo
-      | lista_objeto_complejo ',' objeto_complejo
+      : objeto_complejo                               {printf("lista_objeto_complejo->objeto_complejo\n");}
+      | lista_objeto_complejo ',' objeto_complejo     {printf("lista_objeto_complejo->lista_objeto_complejo ',' objeto_complejo\n");}
       ;
 
 lista_elemento_hastable
-      : elemento_hastable
-      | lista_elemento_hastable ',' elemento_hastable
+      : elemento_hastable                                   {printf("lista_elemento_hastable->elemento_hastable\n");}
+      | lista_elemento_hastable ',' elemento_hastable       {printf("lista_elemento_hastable->lista_elemento_hastable ',' elemento_hastable\n");}
       ;
 
 lista_elemento_registro
@@ -377,98 +377,98 @@ llamada_suprograma
 /* EXPRESIONES */
 
 primario
-      : literal    {printf("primario->literal\n");}
-      | nombre
-      | '(' expresion ')'
+      : literal               {printf("primario->literal\n");}
+      | nombre                {printf("primario->nombre\n");}
+      | '(' expresion ')'     {printf("primario->(expresion)\n");}
       ;
 
 literal
-      : CTC_CADENA
-      | CTC_CARACTER
-      | CTC_FLOAT
-      | CTC_INT
-      | TRUE
-      | FALSE
+      : CTC_CADENA            {printf("literal->CTC_CADENA\n");}
+      | CTC_CARACTER          {printf("literal->CTC_CARACTER\n");}
+      | CTC_FLOAT             {printf("literal->CTC_FLOAT\n");}
+      | CTC_INT               {printf("literal->CTC_INT\n");}
+      | TRUE                  {printf("literal->TRUE\n");}
+      | FALSE                 {printf("literal->FALSE\n");}
       ;
 
 nombre
-      : componente_indexado
-      | componente_hash
-      | componente_compuesto
-      | llamada_suprograma
-      | IDENTIFICADOR
+      : componente_indexado   {printf("nombre->componente_indexado\n");}
+      | componente_hash       {printf("nombre->componente_hash\n");}
+      | componente_compuesto  {printf("nombre->componente_compuesto\n");}
+      | llamada_suprograma    {printf("nombre->llamada_suprograma\n");}
+      | IDENTIFICADOR         {printf("nombre->IDENTIFICADOR\n");}
       ;
 
 componente_indexado
-      : nombre '[' expresion ']'
+      : nombre '[' expresion ']'    {printf("componente_indexado->nombre[expresion]\n");}
       ;
 
 componente_hash
-      : nombre '{' expresion '}'
+      : nombre '{' expresion '}'    {printf("componente_hash->nombre{expresion}\n");}
       ;
 
 componente_compuesto
-      : nombre '.' IDENTIFICADOR
-      | nombre '.' llamada_suprograma
+      : nombre '.' IDENTIFICADOR          {printf("componente_compuesto->nombre . IDENTIFICADOR\n");}
+      | nombre '.' llamada_suprograma     {printf("componente_compuesto->nombre . llamada_suprograma\n");}
       ;
 
 expresion_logica 
-    : expresion_logica OR expresion_logica1
-    | expresion_logica1
+    : expresion_logica OR expresion_logica1     {printf("expresion_logica->expresion_logica OR expresion_logica1\n");}
+    | expresion_logica1                         {printf("expresion_logica->expresion_logica1\n");}
     ;
 
 expresion_logica1
-    : expresion_logica1 AND expresion_logica2
-    | expresion_logica2
+    : expresion_logica1 AND expresion_logica2   {printf("expresion_logica1->expresion_logica1 AND expresion_logica2\n");}
+    | expresion_logica2                         {printf("expresion_logica1->expresion_logica2\n");}
     ;
 
 expresion_logica2
-    : NOT expresion_logica3
-    | expresion_logica3
+    : NOT expresion_logica3                     {printf("expresion_logica2->NOT expresion_logica3\n");}
+    | expresion_logica3                         {printf("expresion_logica2->expresion_logica3\n");}
     ;
 
 expresion_logica3
-    : expresion_logica3 '=' expresion_logica4
-    | expresion_logica3 DISTINTO expresion_logica4
-    | expresion_logica3 '<' expresion_logica4
-    | expresion_logica3 '>' expresion_logica4
-    | expresion_logica3 MENOR_IGUAL expresion_logica4
-    | expresion_logica3 MAYOR_IGUAL expresion_logica4
-    | expresion_logica4
+    : expresion_logica3 '=' expresion_logica4         {printf("expresion_logica3->expresion_logica3 = expresion_logica4\n");}
+    | expresion_logica3 DISTINTO expresion_logica4    {printf("expresion_logica3->expresion_logica3 DISTINTO expresion_logica4\n");}
+    | expresion_logica3 '<' expresion_logica4         {printf("expresion_logica3->expresion_logica3 < expresion_logica4\n");}
+    | expresion_logica3 '>' expresion_logica4         {printf("expresion_logica3->expresion_logica3 > expresion_logica4\n");}
+    | expresion_logica3 MENOR_IGUAL expresion_logica4 {printf("expresion_logica3->expresion_logica3 MENOR_IGUAL expresion_logica4\n");}
+    | expresion_logica3 MAYOR_IGUAL expresion_logica4 {printf("expresion_logica3->expresion_logica3 MAYOR_IGUAL expresion_logica4\n");}
+    | expresion_logica4                               {printf("expresion_logica3->expresion_logica4\n");}
     ;
 
 expresion_logica4
-    : expresion_logica4 '@' expresion_logica5
-    | expresion_logica5
+    : expresion_logica4 '@' expresion_logica5         {printf("expresion_logica4->expresion_logica4 @ expresion_logica5\n");}
+    | expresion_logica5                               {printf("expresion_logica4->expresion_logica5\n");}
     ;
 
 expresion_logica5
-    : expresion_logica5 '&' expresion_logica6
-    | expresion_logica6
+    : expresion_logica5 '&' expresion_logica6         {printf("expresion_logica5->expresion_logica5 & expresion_logica6\n");}
+    | expresion_logica6                               {printf("expresion_logica5->expresion_logica6\n");}
     ;
 
 expresion_logica6
-    : expresion_logica6 '+' expresion_logica7
-    | expresion_logica6 '-' expresion_logica7
+    : expresion_logica6 '+' expresion_logica7         {printf("expresion_logica6->expresion_logica6 '+' expresion_logica7\n");}
+    //| expresion_logica6 '-' expresion_logica7         {printf("expresion_logica6->expresion_logica6 '-' expresion_logica7\n");}
     //| expresion_logica6 '-' expresion_logica9 //sobrecargar para resta y menos unitario
-    | expresion_logica7                                                       
+    | expresion_logica7                               {printf("expresion_logica6->expresion_logica7\n");}
     ;
 
 expresion_logica7
-    : expresion_logica7 '*' expresion_logica8                               
-    | expresion_logica7 '%' expresion_logica8
-    | expresion_logica7 MOD expresion_logica8                                
-    | expresion_logica8                                                       
+    : expresion_logica7 '*' expresion_logica8         {printf("expresion_logica7->expresion_logica7 * expresion_logica8\n");}
+    | expresion_logica7 '%' expresion_logica8         //{printf("expresion_logica7->expresion_logica7 '%' expresion_logica8\n");}
+    | expresion_logica7 MOD expresion_logica8         {printf("expresion_logica7->expresion_logica7 MOD expresion_logica8\n");}
+    | expresion_logica8                               {printf("expresion_logica7->expresion_logica8\n");}
     ;
 
 expresion_logica8
-    : expresion_logica9 EXP expresion_logica8                                  
-    | expresion_logica9                                                       
+    : expresion_logica9 EXP expresion_logica8         {printf("expresion_logica8->expresion_logica9 EXP expresion_logica8\n");}
+    | expresion_logica9                               {printf("expresion_logica8->expresion_logica9\n");}
     ;
 
 expresion_logica9
-    : '-' primario
-    | primario
+    : '-' primario                                    {printf("expresion_logica9-> - primario\n");}
+    | primario                                        {printf("expresion_logica9-> primario\n");}
     ;
 
 expresion
