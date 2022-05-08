@@ -295,83 +295,84 @@ instruccion_exit
       ;
 
 instruccion_if
-      : IF expresion THEN lista_instruccion FINISH IF ';'
-      | IF expresion THEN lista_instruccion ELSE lista_instruccion FINISH IF ';'
+      : IF expresion THEN lista_instruccion FINISH IF ';'                           {printf("instruccion_if->IF expresion THEN lista_instruccion FINISH IF ';'\n");}
+      | IF expresion THEN lista_instruccion ELSE lista_instruccion FINISH IF ';'    {printf("instruccion_if->IF expresion THEN lista_instruccion ELSE lista_instruccion FINISH IF ';'\n");}
       ;
 
 instruccion_case
-      : CASE expresion IS lista_caso_when FINISH CASE ';'
+      : CASE expresion IS lista_caso_when FINISH CASE ';'   {printf("instruccion_case->CASE expresion IS lista_caso_when FINISH CASE ';'\n");}
       ;
 
 caso_when
-      : WHEN entrada FLECHA lista_instruccion
-      | WHEN entrada lista_entrada FLECHA lista_instruccion
+      : WHEN entrada FLECHA lista_instruccion                     {printf("caso_when->WHEN entrada FLECHA lista_instruccion\n");}
+      | WHEN entrada lista_entrada FLECHA lista_instruccion       {printf("caso_when->WHEN entrada lista_entrada FLECHA lista_instruccion\n");}
       ;
 
 lista_caso_when
-      : caso_when
-      | lista_caso_when caso_when
+      : caso_when                         {printf("lista_caso_when->caso_when\n");}
+      | lista_caso_when caso_when         {printf("lista_caso_when->lista_caso_when caso_when\n");}
       ;
 
 entrada
-      : expresion
-      | expresion DOS_PTOS expresion
-      | OTHERS
+      : expresion                         {printf("entrada->expresion\n");}
+      | expresion DOS_PTOS expresion      {printf("entrada->expresion DOS_PTOS expresion\n");}
+      | OTHERS                            {printf("entrada->OTHERS\n");}
       ;
 
 lista_entrada
-      : entrada
-      | entrada '|' lista_entrada
+      : entrada                           {printf("lista_entrada->entrada\n");}
+      | entrada '|' lista_entrada         {printf("lista_entrada->entrada '|' lista_entrada\n");}
       ;
 
 instruccion_loop
-      : clausula_iteracion bucle_base ';'
-      | IDENTIFICADOR ':' clausula_iteracion bucle_base ';'
+      : clausula_iteracion bucle_base ';'                         {printf("instruccion_loop->clausula_iteracion bucle_base ';'\n");}
+      | IDENTIFICADOR ':' clausula_iteracion bucle_base ';'       {printf("instruccion_loop->IDENTIFICADOR ':' clausula_iteracion bucle_base ';'\n");}
       ;
 
 clausula_iteracion
-      : FOR IDENTIFICADOR IN expresion DOS_PTOS expresion
-      | FOR IDENTIFICADOR IN REVERSE expresion DOS_PTOS expresion
-      | FOREACH IDENTIFICADOR IN expresion
-      | WHILE expresion
+      : FOR IDENTIFICADOR IN expresion DOS_PTOS expresion               {printf("clausula_iteracion->FOR IDENTIFICADOR IN expresion DOS_PTOS expresion\n");}
+      | FOR IDENTIFICADOR IN REVERSE expresion DOS_PTOS expresion       {printf("clausula_iteracion->FOR IDENTIFICADOR IN REVERSE expresion DOS_PTOS expresion\n");}
+      | FOREACH IDENTIFICADOR IN expresion                              {printf("clausula_iteracion->FOREACH IDENTIFICADOR IN expresion\n");}
+      | WHILE expresion                                                 {printf("clausula_iteracion->WHILE expresion\n");}
       ;
 
 bucle_base
-      : LOOP lista_instruccion FINISH LOOP
+      : LOOP lista_instruccion FINISH LOOP      {printf("bucle_base->LOOP lista_instruccion FINISH LOOP\n");}
       ;
 
 instruccion_rise
-      : RAISE IDENTIFICADOR ';'
+      : RAISE IDENTIFICADOR ';'     {printf("instruccion_rise->RAISE IDENTIFICADOR ';'\n");}
       ;
 
 instruccion_try_catch
-      : TRY lista_instruccion clausulas_excepcion FINISH TRY
+      : TRY lista_instruccion clausulas_excepcion FINISH TRY      {printf("instruccion_try_catch->TRY lista_instruccion clausulas_excepcion FINISH TRY\n");}
       ;
 
 clausulas_excepcion
-      : clausula_defecto
-      | lista_clausula_especifica clausula_defecto
-      | lista_clausula_especifica
+      : clausula_defecto                                    {printf("clausulas_excepcion->clausula_defecto\n");}
+      | lista_clausula_especifica clausula_defecto          {printf("clausulas_excepcion->lista_clausula_especifica clausula_defecto\n");}
+      | lista_clausula_especifica                           {printf("clausulas_excepcion->lista_clausula_especifica\n");}
       ;
 
 clausula_especifica
-      : EXCEPTION '(' IDENTIFICADOR ')' lista_instruccion
+      : EXCEPTION '(' IDENTIFICADOR ')' lista_instruccion   {printf("clausula_especifica->EXCEPTION '(' IDENTIFICADOR ')' lista_instruccion\n");}
       ;
 
 lista_clausula_especifica
-      : clausula_especifica
-      | lista_clausula_especifica clausula_especifica
+      : clausula_especifica                                 {printf("lista_clausula_especifica->clausula_especifica\n");}
+      | lista_clausula_especifica clausula_especifica       {printf("lista_clausula_especifica->lista_clausula_especifica clausula_especifica\n");}
       ;
 
 clausula_defecto
-      : DEFAULT '(' IDENTIFICADOR ')' lista_instruccion
+      : DEFAULT '(' IDENTIFICADOR ')' lista_instruccion     {printf("clausula_defecto->DEFAULT '(' IDENTIFICADOR ')' lista_instruccion\n");}
       ;
 
 llamada_procedure
-      : llamada_suprograma ';'
+      : llamada_suprograma ';'      {printf("llamada_procedure->llamada_suprograma ';'\n");}
 
 llamada_suprograma
-      : IDENTIFICADOR '(' lista_expresion ')'
+      : IDENTIFICADOR '('')'                    {printf("llamada_suprograma->IDENTIFICADOR '('')'\n");}
+      | IDENTIFICADOR '(' lista_expresion ')'   {printf("llamada_suprograma->IDENTIFICADOR '(' lista_expresion ')'\n");}
       ;
 
 /* EXPRESIONES */
@@ -438,25 +439,24 @@ expresion_logica3
     ;
 
 expresion_logica4
-    : expresion_logica4 '@' expresion_logica5         {printf("expresion_logica4->expresion_logica4 @ expresion_logica5\n");}
+    : expresion_logica4 '@' expresion_logica5         {printf("expresion_logica4->expresion_logica4 '@' expresion_logica5\n");}
     | expresion_logica5                               {printf("expresion_logica4->expresion_logica5\n");}
     ;
 
 expresion_logica5
-    : expresion_logica5 '&' expresion_logica6         {printf("expresion_logica5->expresion_logica5 & expresion_logica6\n");}
+    : expresion_logica5 '&' expresion_logica6         {printf("expresion_logica5->expresion_logica5 '&' expresion_logica6\n");}
     | expresion_logica6                               {printf("expresion_logica5->expresion_logica6\n");}
     ;
 
 expresion_logica6
     : expresion_logica6 '+' expresion_logica7         {printf("expresion_logica6->expresion_logica6 '+' expresion_logica7\n");}
-    //| expresion_logica6 '-' expresion_logica7         {printf("expresion_logica6->expresion_logica6 '-' expresion_logica7\n");}
-    //| expresion_logica6 '-' expresion_logica9 //sobrecargar para resta y menos unitario
+    | expresion_logica6 '-' expresion_logica7         {printf("expresion_logica6->expresion_logica6 '-' expresion_logica7\n");}
     | expresion_logica7                               {printf("expresion_logica6->expresion_logica7\n");}
     ;
 
 expresion_logica7
-    : expresion_logica7 '*' expresion_logica8         {printf("expresion_logica7->expresion_logica7 * expresion_logica8\n");}
-    | expresion_logica7 '%' expresion_logica8         //{printf("expresion_logica7->expresion_logica7 '%' expresion_logica8\n");}
+    : expresion_logica7 '*' expresion_logica8         {printf("expresion_logica7->expresion_logica7 '*' expresion_logica8\n");}
+    | expresion_logica7 '%' expresion_logica8         {printf("exp_log7->exp_log7 (porcentaje) exp_log8\n")}
     | expresion_logica7 MOD expresion_logica8         {printf("expresion_logica7->expresion_logica7 MOD expresion_logica8\n");}
     | expresion_logica8                               {printf("expresion_logica7->expresion_logica8\n");}
     ;
@@ -467,13 +467,13 @@ expresion_logica8
     ;
 
 expresion_logica9
-    : '-' primario                                    {printf("expresion_logica9-> - primario\n");}
-    | primario                                        {printf("expresion_logica9-> primario\n");}
+    : '-' primario                                    {printf("expresion_logica9->- primario\n");}
+    | primario                                        {printf("expresion_logica9->primario\n");}
     ;
 
 expresion
-      : expresion_logica
-      | expresion_logica IF expresion ELSE expresion
+      : expresion_logica                                    {printf("expresion->expresion_logica\n");}
+      | expresion_logica IF expresion ELSE expresion        {printf("expresion->expresion_logica IF expresion ELSE expresion\n");}
       ;
 
 %%
