@@ -2,3 +2,4 @@ lex.yy.c
 machina
 machina.output
 machina.tab.*
+*.txt
