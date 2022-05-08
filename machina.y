@@ -21,10 +21,10 @@
 /* DECLARACIONES */
 
 declaracion
-      : declaracion_objeto                {printf("declaracion->declaracion_objeto\n");}
-      | declaracion_tipo                  {printf("declaracion->declaracion_tipo\n");}
-      | declaracion_subprograma           {printf("declaracion->declaracion_subprograma\n");}
-      | error ';'
+      : declaracion_objeto               {printf("declaracion->declaracion_objeto\n");}
+      | declaracion_tipo                 {printf("declaracion->declaracion_tipo\n");}
+      | declaracion_subprograma          {printf("declaracion->declaracion_subprograma\n");}
+      //| error ';' {yyerrok}
       ;
 
 declaracion_objeto
@@ -36,6 +36,7 @@ declaracion_objeto
       | lista_identificadores ':' CONSTANT tipo_complejo ';'                        {printf("declaracion_objeto->lista_identificadores ':' CONSTANT tipo_complejo ';'\n");}
       | lista_identificadores ':' tipo_complejo asignacion_complejo ';'             {printf("declaracion_objeto->lista_identificadores ':' tipo_complejo asignacion_complejo ';'\n");}
       | lista_identificadores ':' CONSTANT tipo_complejo asignacion_complejo ';'    {printf("declaracion_objeto->lista_identificadores ':' CONSTANT tipo_complejo asignacion_complejo ';'\n");}
+      //| error ';'
       ;
 
 lista_identificadores
@@ -66,6 +67,7 @@ tipo_complejo
 
 nombre_de_tipo
       : IDENTIFICADOR         {printf("nombre_de_tipo->IDENTIFICADOR\n");}
+      | error
       ;
 
 tipo_compuesto
@@ -82,11 +84,8 @@ asignacion_complejo
 
 objeto_complejo
       : '[' lista_objeto_complejo ']'     {printf("objeto_complejo->'[' lista_objeto_complejo ']'\n");}
-      | '[' error ']'
       | '{' lista_elemento_hastable '}'   {printf("objeto_complejo->'{' lista_elemento_hastable '}'\n");}
-      | '{' error '}'
       | '(' lista_elemento_registro ')'   {printf("objeto_complejo->'(' lista_elemento_registro ')'\n");}
-      | '(' error ')'
       | literal                           {printf("objeto_complejo->literal\n");}
       ;
 
@@ -101,22 +100,26 @@ elemento_registro
 lista_objeto_complejo
       : lista_objeto_complejo ',' objeto_complejo     {printf("lista_objeto_complejo->lista_objeto_complejo ',' objeto_complejo\n");}
       | objeto_complejo                               {printf("lista_objeto_complejo->objeto_complejo\n");}
+      | error
       ;
 
 lista_elemento_hastable
       : lista_elemento_hastable ',' elemento_hastable       {printf("lista_elemento_hastable->lista_elemento_hastable ',' elemento_hastable\n");}
       | elemento_hastable                                   {printf("lista_elemento_hastable->elemento_hastable\n");}
+      | error
       ;
 
 lista_elemento_registro
       : lista_elemento_registro ',' elemento_registro       {printf("lista_elemento_registro->lista_elemento_registro ',' elemento_registro\n");}
       | elemento_registro                                   {printf("lista_elemento_registro->elemento_registro\n");}
+      | error
       ;
 
 /* TIPOS */
 
 declaracion_tipo
       : TYPE IDENTIFICADOR IS especificacion_tipo ';'       {printf("declaracion_tipo->TYPE IDENTIFICADOR IS especificacion_tipo ';'\n");}
+      //| error ';'
       ;
 
 especificacion_tipo
@@ -140,6 +143,7 @@ lista_componente
 
 componente
       : lista_identificadores ':' especificacion_tipo ';'   {printf("componente->lista_identificadores ':' especificacion_tipo ';'\n");}
+      | error ';'
       ;
 
 tipo_hashtable
@@ -215,20 +219,19 @@ declaracion_subprograma
 especificacion_subprograma
       : PROCEDURE IDENTIFICADOR                             {printf("especificacion_subprograma->PROCEDURE IDENTIFICADOR\n");}
       | PROCEDURE IDENTIFICADOR '(' parte_formal ')'        {printf("especificacion_subprograma->PROCEDURE IDENTIFICADOR '(' parte_formal ')'\n");}
-      | FUNCTION IDENTIFICADOR                              {printf("especificacion_subprograma->FUNCTION IDENTIFICADOR\n");}
-      | FUNCTION IDENTIFICADOR '(' parte_formal ')'         {printf("especificacion_subprograma->FUNCTION IDENTIFICADOR '(' parte_formal ')'\n");}
-      RETURN especificacion_tipo                            {printf("especificacion_subprograma->RETURN especificacion_tipo\n");}
+      | FUNCTION IDENTIFICADOR RETURN especificacion_tipo                      {printf("especificacion_subprograma->FUNCTION IDENTIFICADOR RETURN especificacion_tipo\n");}
+      | FUNCTION IDENTIFICADOR '(' parte_formal ')' RETURN especificacion_tipo {printf("especificacion_subprograma->FUNCTION IDENTIFICADOR '(' parte_formal ')' RETURN especificacion_tipo\n");}
       ;
 
 parte_formal
       : /*vacio*/                   {printf("parte_formal->vacio\n");}
       | declaracion_parametros      {printf("parte_formal->declaracion_parametros\n");}
-      //| error
+      | error
       ;
 
 declaracion_parametros
-      : declaracion_parametro                               {printf("declaracion_parametros->declaracion_parametro\n");}
-      | declaracion_parametro ';' lista_declaracion_parametro   {printf("declaracion_parametros->declaracion_parametro lista_declaracion_parametro\n");}
+      : declaracion_parametro                                     {printf("declaracion_parametros->declaracion_parametro\n");}
+      | declaracion_parametro ';' lista_declaracion_parametro     {printf("declaracion_parametros->declaracion_parametro lista_declaracion_parametro\n");}
       ;
 
 lista_declaracion_parametro
@@ -372,6 +375,7 @@ clausula_defecto
 
 llamada_procedure
       : llamada_suprograma ';'      {printf("llamada_procedure->llamada_suprograma ';'\n");}
+      | error ';'
       ;
 
 llamada_suprograma
@@ -385,6 +389,7 @@ primario
       : literal               {printf("primario->literal\n");}
       | nombre                {printf("primario->nombre\n");}
       | '(' expresion ')'     {printf("primario->(expresion)\n");}
+      | '(' error ')'
       ;
 
 literal

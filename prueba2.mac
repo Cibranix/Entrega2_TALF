@@ -1,0 +1,13 @@
+TYPE esfera IS CLASS (forma)
+    PRIVATE radio : float;
+    -- constructor
+    CONSTRUCTOR PROCEDURE esfera (radio : FLOAT) is
+    START
+        esfera.radio := radio;
+    FINISH radio;
+    -- metodo
+    PUBLIC FINAL FUNCTION volumen RETURN FLOAT is
+    START
+        return 4%3*PI*pow(radio,3);
+    FINISH volumen;
+FINISH CLASS;
