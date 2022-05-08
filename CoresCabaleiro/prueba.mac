@@ -1,0 +1,53 @@
+procedure EJEMPLO_ADICIONES is
+    type FECHA is record
+        DIA : INTEGER;
+        MES : INTEGER;
+        ANNO : INTEGER;
+        finish record;
+
+    type dia_semana is enumeration of integer
+      LUNES->1, MARTES->2, MIERCOLES->3, JUEVES->4, VIERNES->5, SABADO->6, DOMINGO->7
+    finish enumeration;
+
+    HOY : dia_semana;
+    
+    // esto es un
+      comentario multilinea
+      pero que sigue en otra linea\\
+
+    lista_int : array (1..100) of integer := [ 1, \h7AF, \O25, 400];
+    acumulador : integer;
+
+    type t_hash_cadenas is hashtable of <integer, array (1..50) of character>;
+    mi_hash : hashtable of <FECHA, integer>;
+    
+    lista_cadenas : t_hash_cadenas := { 55 -> "prueba\
+                                        ",
+                                        61 -> "fantastico",
+                                        101 -> "\nRadio de la /*circunferencia*/\
+                                                \O151\o144\H69\o157\h74\o141: "};
+                                        
+    PI : constant float := 3.141592;  -- variable global
+    lista : array (1..100) of float := [ .45^-27, 5^18, \H7F^\o55, 91.\o41^\hFF];
+
+start
+    HOY := MARTES;
+
+    case HOY is
+        when LUNES .. JUEVES  -> TRABAJO();
+        when VIERNES | SABADO -> TRABAJO(); DEPORTE();
+        when others           -> nil;
+    finish case ;
+
+    valor := mi_hash{hoy}; -- lectura de un valor de una tabla hash
+    imprimir(mi_hash{hoy});
+
+    mi_hash{manana} := 123; -- escritura de un valor (manana es una variable de tipo FECHA)
+
+    acumulador := 0;
+
+    foreach elemento in lista_int
+    loop
+        acumulador := acumulador + elemento;
+    finish loop;
+finish EJEMPLO_ADICIONES;
