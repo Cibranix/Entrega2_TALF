@@ -16,7 +16,9 @@
 %token IF IN INTEGER IS LOOP MAYOR_IGUAL MENOR_IGUAL MOD NOT NIL OF OR OTHERS OUT PROCEDURE PRIVATE 
 %token PROTECTED PUBLIC RAISE RECORD RETURN REVERSE START THEN TRUE TRY TYPE WHEN WHILE
 
-
+%right EXP
+%left OR AND '@' '&' '+' '-' '*' '%' MOD
+%nonassoc NOT '=' DISTINTO '<' '>' MENOR_IGUAL MAYOR_IGUAL
 
 %%
 
@@ -26,6 +28,7 @@ declaracion
       : declaracion_objeto                {printf("declaracion->declaracion_objeto\n");}
       | declaracion_tipo                  {printf("declaracion->declaracion_tipo\n");}
       | declaracion_subprograma           {printf("declaracion->declaracion_subprograma\n");}
+      //| error ';'
       ;
 
 declaracion_objeto
@@ -83,8 +86,11 @@ asignacion_complejo
 
 objeto_complejo
       : '[' lista_objeto_complejo ']'     {printf("objeto_complejo->'[' lista_objeto_complejo ']'\n");}
+      //| '[' error ']'
       | '{' lista_elemento_hastable '}'   {printf("objeto_complejo->'{' lista_elemento_hastable '}'\n");}
+      //| '{' error '}'
       | '(' lista_elemento_registro ')'   {printf("objeto_complejo->'(' lista_elemento_registro ')'\n");}
+      //| '(' error ')'
       | literal                           {printf("objeto_complejo->literal\n");}
       ;
 
@@ -221,6 +227,7 @@ especificacion_subprograma
 parte_formal
       : /*vacio*/                   {printf("parte_formal->vacio\n");}
       | declaracion_parametros      {printf("parte_formal->declaracion_parametros\n");}
+      //| error
       ;
 
 declaracion_parametros
@@ -369,6 +376,7 @@ clausula_defecto
 
 llamada_procedure
       : llamada_suprograma ';'      {printf("llamada_procedure->llamada_suprograma ';'\n");}
+      ;
 
 llamada_suprograma
       : IDENTIFICADOR '('')'                    {printf("llamada_suprograma->IDENTIFICADOR '('')'\n");}
@@ -412,7 +420,7 @@ componente_compuesto
       : nombre '.' IDENTIFICADOR          {printf("componente_compuesto->nombre . IDENTIFICADOR\n");}
       | nombre '.' llamada_suprograma     {printf("componente_compuesto->nombre . llamada_suprograma\n");}
       ;
-
+/*
 expresion_logica 
     : expresion_logica OR expresion_logica1     {printf("expresion_logica->expresion_logica OR expresion_logica1\n");}
     | expresion_logica1                         {printf("expresion_logica->expresion_logica1\n");}
@@ -456,7 +464,7 @@ expresion_logica6
 
 expresion_logica7
     : expresion_logica7 '*' expresion_logica8         {printf("expresion_logica7->expresion_logica7 '*' expresion_logica8\n");}
-    | expresion_logica7 '%' expresion_logica8         {printf("exp_log7->exp_log7 (porcentaje) exp_log8\n")}
+    | expresion_logica7 '%' expresion_logica8         {printf("exp_log7->exp_log7 (porcentaje) exp_log8\n");}
     | expresion_logica7 MOD expresion_logica8         {printf("expresion_logica7->expresion_logica7 MOD expresion_logica8\n");}
     | expresion_logica8                               {printf("expresion_logica7->expresion_logica8\n");}
     ;
@@ -469,6 +477,30 @@ expresion_logica8
 expresion_logica9
     : '-' primario                                    {printf("expresion_logica9->- primario\n");}
     | primario                                        {printf("expresion_logica9->primario\n");}
+    ;
+*/
+
+expresion_logica 
+    : CTC_FLOAT
+    | CTC_INT
+    | expresion_logica OR expresion_logica            {printf("expresion_logica->expresion_logica\n");}
+    | expresion_logica AND expresion_logica           {printf("expresion_logica->expresion_logica\n");}
+    | NOT expresion_logica                            {printf("expresion_logica->expresion_logica\n");}
+    | expresion_logica MAYOR_IGUAL expresion_logica   {printf("expresion_logica->expresion_logica\n");}
+    | expresion_logica MENOR_IGUAL expresion_logica   {printf("expresion_logica->expresion_logica\n");}
+    | expresion_logica '>' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
+    | expresion_logica '<' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
+    | expresion_logica DISTINTO expresion_logica      {printf("expresion_logica->expresion_logica\n");}
+    | expresion_logica '=' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
+    | expresion_logica '@' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
+    | expresion_logica '&' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
+    | expresion_logica '+' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
+    | expresion_logica '-' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
+    | expresion_logica MOD expresion_logica           {printf("expresion_logica->expresion_logica\n");}
+    | expresion_logica '%' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
+    | expresion_logica '*' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
+    | expresion_logica EXP expresion_logica           {printf("expresion_logica->expresion_logica\n");}
+    | '-' expresion_logica                            {printf("expresion_logica->expresion_logica\n");}
     ;
 
 expresion
