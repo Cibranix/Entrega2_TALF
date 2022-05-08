@@ -16,10 +16,6 @@
 %token IF IN INTEGER IS LOOP MAYOR_IGUAL MENOR_IGUAL MOD NOT NIL OF OR OTHERS OUT PROCEDURE PRIVATE 
 %token PROTECTED PUBLIC RAISE RECORD RETURN REVERSE START THEN TRUE TRY TYPE WHEN WHILE
 
-%right EXP
-%left OR AND '@' '&' '+' '-' '*' '%' MOD
-%nonassoc NOT '=' DISTINTO '<' '>' MENOR_IGUAL MAYOR_IGUAL
-
 %%
 
 /* DECLARACIONES */
@@ -28,7 +24,7 @@ declaracion
       : declaracion_objeto                {printf("declaracion->declaracion_objeto\n");}
       | declaracion_tipo                  {printf("declaracion->declaracion_tipo\n");}
       | declaracion_subprograma           {printf("declaracion->declaracion_subprograma\n");}
-      //| error ';'
+      | error ';'
       ;
 
 declaracion_objeto
@@ -43,8 +39,8 @@ declaracion_objeto
       ;
 
 lista_identificadores
-      : IDENTIFICADOR                                 {printf("lista_identificadores->IDENTIFICADOR\n");}
-      | lista_identificadores ',' IDENTIFICADOR       {printf("lista_identificadores->lista_identificadores ',' IDENTIFICADOR\n");}
+      : lista_identificadores ',' IDENTIFICADOR       {printf("lista_identificadores->lista_identificadores ',' IDENTIFICADOR\n");}
+      | IDENTIFICADOR                                 {printf("lista_identificadores->IDENTIFICADOR\n");}
       ;
 
 tipo_escalar
@@ -54,13 +50,13 @@ tipo_escalar
       | CHARACTER       {printf("tipo_escalar->CHARACTER\n");}
       ;
 
-asignacion_escalar
-      : ASIG lista_expresion        {printf("asignacion_escalar->ASIG lista_expresion \n");}
+lista_expresion
+      : lista_expresion ',' expresion     {printf("lista_expresion->lista_expresion ',' expresion\n");}
+      | expresion                         {printf("lista_expresion->expresion\n");}
       ;
 
-lista_expresion
-      : expresion                         {printf("lista_expresion->expresion\n");}
-      | lista_expresion ',' expresion     {printf("lista_expresion->lista_expresion ',' expresion\n");}
+asignacion_escalar
+      : ASIG lista_expresion        {printf("asignacion_escalar->ASIG lista_expresion \n");}
       ;
 
 tipo_complejo
@@ -86,11 +82,11 @@ asignacion_complejo
 
 objeto_complejo
       : '[' lista_objeto_complejo ']'     {printf("objeto_complejo->'[' lista_objeto_complejo ']'\n");}
-      //| '[' error ']'
+      | '[' error ']'
       | '{' lista_elemento_hastable '}'   {printf("objeto_complejo->'{' lista_elemento_hastable '}'\n");}
-      //| '{' error '}'
+      | '{' error '}'
       | '(' lista_elemento_registro ')'   {printf("objeto_complejo->'(' lista_elemento_registro ')'\n");}
-      //| '(' error ')'
+      | '(' error ')'
       | literal                           {printf("objeto_complejo->literal\n");}
       ;
 
@@ -103,18 +99,18 @@ elemento_registro
       ;
 
 lista_objeto_complejo
-      : objeto_complejo                               {printf("lista_objeto_complejo->objeto_complejo\n");}
-      | lista_objeto_complejo ',' objeto_complejo     {printf("lista_objeto_complejo->lista_objeto_complejo ',' objeto_complejo\n");}
+      : lista_objeto_complejo ',' objeto_complejo     {printf("lista_objeto_complejo->lista_objeto_complejo ',' objeto_complejo\n");}
+      | objeto_complejo                               {printf("lista_objeto_complejo->objeto_complejo\n");}
       ;
 
 lista_elemento_hastable
-      : elemento_hastable                                   {printf("lista_elemento_hastable->elemento_hastable\n");}
-      | lista_elemento_hastable ',' elemento_hastable       {printf("lista_elemento_hastable->lista_elemento_hastable ',' elemento_hastable\n");}
+      : lista_elemento_hastable ',' elemento_hastable       {printf("lista_elemento_hastable->lista_elemento_hastable ',' elemento_hastable\n");}
+      | elemento_hastable                                   {printf("lista_elemento_hastable->elemento_hastable\n");}
       ;
 
 lista_elemento_registro
-      : elemento_registro                                   {printf("lista_elemento_registro->elemento_registro\n");}
-      | lista_elemento_registro ',' elemento_registro       {printf("lista_elemento_registro->lista_elemento_registro ',' elemento_registro\n");}
+      : lista_elemento_registro ',' elemento_registro       {printf("lista_elemento_registro->lista_elemento_registro ',' elemento_registro\n");}
+      | elemento_registro                                   {printf("lista_elemento_registro->elemento_registro\n");}
       ;
 
 /* TIPOS */
@@ -138,8 +134,8 @@ tipo_registro
       ;
 
 lista_componente
-      : componente                        {printf("lista_componente->componente\n");}
-      | lista_componente componente       {printf("lista_componente->lista_componente componente\n");}
+      : lista_componente componente       {printf("lista_componente->lista_componente componente\n");}
+      | componente                        {printf("lista_componente->componente\n");}
       ;
 
 componente
@@ -156,8 +152,8 @@ tipo_clase
       ;
 
 lista_componente_clase
-      : componente_clase                              {printf("lista_componente_clase->componente_clase\n");}
-      | lista_componente_clase componente_clase       {printf("lista_componente_clase->lista_componente_clase componente_clase\n");}
+      : lista_componente_clase componente_clase       {printf("lista_componente_clase->lista_componente_clase componente_clase\n");}
+      | componente_clase                              {printf("lista_componente_clase->componente_clase\n");}
       ;
 
 componente_clase
@@ -191,8 +187,8 @@ modificador
       ;
 
 lista_modificador
-      : modificador                       {printf("lista_modificador->modificador\n");}
-      | lista_modificador modificador     {printf("lista_modificador->lista_modificador modificador\n");}
+      : lista_modificador modificador     {printf("lista_modificador->lista_modificador modificador\n");}
+      | modificador                       {printf("lista_modificador->modificador\n");}
       ;
 
 tipo_enumeracion
@@ -205,8 +201,8 @@ elemento
       ;
 
 lista_elemento
-      : elemento                          {printf("lista_elemento->elemento\n");}
-      | lista_elemento ',' elemento       {printf("lista_elemento->lista_elemento ',' elemento\n");}
+      : lista_elemento ',' elemento       {printf("lista_elemento->lista_elemento ',' elemento\n");}
+      | elemento                          {printf("lista_elemento->elemento\n");}
       ;
 
 /* SUBPROGRAMAS */
@@ -232,12 +228,12 @@ parte_formal
 
 declaracion_parametros
       : declaracion_parametro                               {printf("declaracion_parametros->declaracion_parametro\n");}
-      | declaracion_parametro lista_declaracion_parametro   {printf("declaracion_parametros->declaracion_parametro lista_declaracion_parametro\n");}
+      | declaracion_parametro ';' lista_declaracion_parametro   {printf("declaracion_parametros->declaracion_parametro lista_declaracion_parametro\n");}
       ;
 
 lista_declaracion_parametro
-      : declaracion_parametro                                     {printf("lista_declaracion_parametro->declaracion_parametro\n");}
-      | declaracion_parametro ';' lista_declaracion_parametro     {printf("lista_declaracion_parametro->declaracion_parametro ';' lista_declaracion_parametro\n");}
+      : declaracion_parametro ';' lista_declaracion_parametro     {printf("lista_declaracion_parametro->declaracion_parametro ';' lista_declaracion_parametro\n");}
+      | declaracion_parametro                                     {printf("lista_declaracion_parametro->declaracion_parametro\n");}
       ;
 
 declaracion_parametro
@@ -258,13 +254,13 @@ cuerpo_subprograma
       ;
 
 lista_instruccion
-      : instruccion                       {printf("lista_instruccion->instruccion\n");}
-      | lista_instruccion instruccion     {printf("lista_instruccion->lista_instruccion instruccion\n");}
+      : lista_instruccion instruccion     {printf("lista_instruccion->lista_instruccion instruccion\n");}
+      | instruccion                       {printf("lista_instruccion->instruccion\n");}
       ;
 
 lista_declaracion
-      : declaracion                       {printf("lista_declaracion->declaracion\n");}
-      | lista_declaracion declaracion     {printf("lista_declaracion->lista_declaracion declaracion\n");}
+      : lista_declaracion declaracion     {printf("lista_declaracion->lista_declaracion declaracion\n");}
+      | declaracion                       {printf("lista_declaracion->declaracion\n");}
       ;
 
 /* INSTRUCCIONES */
@@ -312,12 +308,12 @@ instruccion_case
 
 caso_when
       : WHEN entrada FLECHA lista_instruccion                     {printf("caso_when->WHEN entrada FLECHA lista_instruccion\n");}
-      | WHEN entrada lista_entrada FLECHA lista_instruccion       {printf("caso_when->WHEN entrada lista_entrada FLECHA lista_instruccion\n");}
+      | WHEN entrada '|' lista_entrada FLECHA lista_instruccion   {printf("caso_when->WHEN entrada lista_entrada FLECHA lista_instruccion\n");}
       ;
 
 lista_caso_when
-      : caso_when                         {printf("lista_caso_when->caso_when\n");}
-      | lista_caso_when caso_when         {printf("lista_caso_when->lista_caso_when caso_when\n");}
+      : lista_caso_when caso_when         {printf("lista_caso_when->lista_caso_when caso_when\n");}
+      | caso_when                         {printf("lista_caso_when->caso_when\n");}
       ;
 
 entrada
@@ -327,8 +323,8 @@ entrada
       ;
 
 lista_entrada
-      : entrada                           {printf("lista_entrada->entrada\n");}
-      | entrada '|' lista_entrada         {printf("lista_entrada->entrada '|' lista_entrada\n");}
+      : entrada '|' lista_entrada         {printf("lista_entrada->entrada '|' lista_entrada\n");}
+      | entrada                           {printf("lista_entrada->entrada\n");}
       ;
 
 instruccion_loop
@@ -366,8 +362,8 @@ clausula_especifica
       ;
 
 lista_clausula_especifica
-      : clausula_especifica                                 {printf("lista_clausula_especifica->clausula_especifica\n");}
-      | lista_clausula_especifica clausula_especifica       {printf("lista_clausula_especifica->lista_clausula_especifica clausula_especifica\n");}
+      : lista_clausula_especifica clausula_especifica       {printf("lista_clausula_especifica->lista_clausula_especifica clausula_especifica\n");}
+      | clausula_especifica                                 {printf("lista_clausula_especifica->clausula_especifica\n");}
       ;
 
 clausula_defecto
@@ -420,7 +416,7 @@ componente_compuesto
       : nombre '.' IDENTIFICADOR          {printf("componente_compuesto->nombre . IDENTIFICADOR\n");}
       | nombre '.' llamada_suprograma     {printf("componente_compuesto->nombre . llamada_suprograma\n");}
       ;
-/*
+
 expresion_logica 
     : expresion_logica OR expresion_logica1     {printf("expresion_logica->expresion_logica OR expresion_logica1\n");}
     | expresion_logica1                         {printf("expresion_logica->expresion_logica1\n");}
@@ -457,8 +453,8 @@ expresion_logica5
     ;
 
 expresion_logica6
-    : expresion_logica6 '+' expresion_logica7         {printf("expresion_logica6->expresion_logica6 '+' expresion_logica7\n");}
-    | expresion_logica6 '-' expresion_logica7         {printf("expresion_logica6->expresion_logica6 '-' expresion_logica7\n");}
+    : expresion_logica6 '-' expresion_logica7         {printf("expresion_logica6->expresion_logica6 '-' expresion_logica7\n");}
+    | expresion_logica6 '+' expresion_logica7         {printf("expresion_logica6->expresion_logica6 '+' expresion_logica7\n");}
     | expresion_logica7                               {printf("expresion_logica6->expresion_logica7\n");}
     ;
 
@@ -478,34 +474,10 @@ expresion_logica9
     : '-' primario                                    {printf("expresion_logica9->- primario\n");}
     | primario                                        {printf("expresion_logica9->primario\n");}
     ;
-*/
-
-expresion_logica 
-    : CTC_FLOAT
-    | CTC_INT
-    | expresion_logica OR expresion_logica            {printf("expresion_logica->expresion_logica\n");}
-    | expresion_logica AND expresion_logica           {printf("expresion_logica->expresion_logica\n");}
-    | NOT expresion_logica                            {printf("expresion_logica->expresion_logica\n");}
-    | expresion_logica MAYOR_IGUAL expresion_logica   {printf("expresion_logica->expresion_logica\n");}
-    | expresion_logica MENOR_IGUAL expresion_logica   {printf("expresion_logica->expresion_logica\n");}
-    | expresion_logica '>' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
-    | expresion_logica '<' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
-    | expresion_logica DISTINTO expresion_logica      {printf("expresion_logica->expresion_logica\n");}
-    | expresion_logica '=' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
-    | expresion_logica '@' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
-    | expresion_logica '&' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
-    | expresion_logica '+' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
-    | expresion_logica '-' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
-    | expresion_logica MOD expresion_logica           {printf("expresion_logica->expresion_logica\n");}
-    | expresion_logica '%' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
-    | expresion_logica '*' expresion_logica           {printf("expresion_logica->expresion_logica\n");}
-    | expresion_logica EXP expresion_logica           {printf("expresion_logica->expresion_logica\n");}
-    | '-' expresion_logica                            {printf("expresion_logica->expresion_logica\n");}
-    ;
 
 expresion
-      : expresion_logica                                    {printf("expresion->expresion_logica\n");}
-      | expresion_logica IF expresion ELSE expresion        {printf("expresion->expresion_logica IF expresion ELSE expresion\n");}
+      : expresion_logica                                          {printf("expresion->expresion_logica\n");}
+      | expresion_logica IF expresion ELSE expresion              {printf("expresion->expresion_logica IF expresion ELSE expresion\n");}
       ;
 
 %%
