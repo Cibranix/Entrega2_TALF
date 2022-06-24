@@ -1,4 +1,4 @@
 # Entrega2_TALF
-Nota: x sobre 2'5 (pendiente)
+Nota: 1,8 sobre 2'5 (pendiente)
 
 Comentarios:
